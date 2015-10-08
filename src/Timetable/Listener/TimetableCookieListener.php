@@ -7,9 +7,8 @@ use Verona\Http\RequestAwareTrait;
 use Verona\Http\ResponseAwareTrait;
 use Verona\Timetable\TimetableManagerEvent;
 use Verona\Timetable\TimetableManagerEvents;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use function GuzzleHttp\Psr7\parse_header;
+use Zend\Http\Request;
+use Zend\Http\Response;
 
 class TimetableCookieListener implements EventSubscriberInterface
 {
@@ -35,11 +34,9 @@ class TimetableCookieListener implements EventSubscriberInterface
 	 */
 	public function getTime(TimetableManagerEvent $event)
 	{
-		if($this->getRequest()->hasHeader('Cookie')) {
-			$cookies = parse_header($this->getRequest()->getHeader());
-			if(isset($cookies[self::COOKIE_NAME])) {
-				$event->setPointInTime(new \DateTime($cookies[self::COOKIE_NAME]));
-			}
+		if($this->getRequest()->getCookie()->offsetExists(self::COOKIE_NAME)) {
+			$point = $this->getRequest()->getCookie()->offsetGet(self::COOKIE_NAME);
+			$event->setPointInTime(new \DateTime($point));
 		}
 	}
 	
@@ -50,8 +47,8 @@ class TimetableCookieListener implements EventSubscriberInterface
 	public function storeTime(TimetableManagerEvent $event)
 	{
 		if($event->hasPointInTime()) {
-			$point = $event->getPointInTime()->format(\DateTime::ISO8601);
-			$this->getResponse()->setHeader('Set-Cookie', [self::COOKIE_NAME => $point]);
+			$point = urlencode($event->getPointInTime()->format(\DateTime::ISO8601));
+			$this->getResponse()->getHeaders()->addHeaderLine(sprintf('Set-Cookie: %s=%s', self::COOKIE_NAME, $point));
 		}
 	}
 	

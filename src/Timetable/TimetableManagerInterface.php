@@ -11,7 +11,7 @@ interface TimetableManagerInterface
 	 * @param \DateTime $dateTime
 	 * @return $this
 	 */
-	public function setPointInTime(\DateTime $dateTime) : self;
+	public function setPointInTime(\DateTime $dateTime);
 	
 	/**
 	 * Get the current date and time
@@ -25,6 +25,6 @@ interface TimetableManagerInterface
 	 * 
 	 * @return $this
 	 */
-	public function savePointInTime() : self;
+	public function savePointInTime();
 	
 }

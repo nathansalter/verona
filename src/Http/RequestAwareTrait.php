@@ -2,9 +2,9 @@
 
 namespace Verona\Http;
 
-use GuzzleHttp\Psr7\Request;
+use Zend\Http\Request;
 
-class RequestAwareTrait
+trait RequestAwareTrait
 {
 	
 	/**

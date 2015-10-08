@@ -2,16 +2,16 @@
 
 namespace Verona\Http;
 
-use GuzzleHttp\Psr7\Response;
+use Zend\Http\Response;
 
-class ResponseAwareTrait
+trait ResponseAwareTrait
 {
 	
 	/**
 	 * 
-	 * @var Response $request
+	 * @var Response $response
 	 */
-	protected $request;
+	protected $response;
 	
 	/**
 	 * 
@@ -19,17 +19,17 @@ class ResponseAwareTrait
 	 */
 	public function hasResponse() : bool
 	{
-		return $this->request instanceof Response;
+		return $this->response instanceof Response;
 	}
 	
 	/**
 	 * 
-	 * @param Response $request
+	 * @param Response $response
 	 * @return $this
 	 */
-	public function setResponse(Response $request) : self
+	public function setResponse(Response $response) : self
 	{
-		$this->request = $request;
+		$this->response = $response;
 		return $this;
 	}
 	
@@ -41,10 +41,10 @@ class ResponseAwareTrait
 	public function getResponse() : Response
 	{
 		if(! $this->hasResponse()) {
-			throw new \RuntimeException(sprintf('%s() expects request to be set,
+			throw new \RuntimeException(sprintf('%s() expects response to be set,
 					none set', __METHOD__));
 		}
-		return $this->request;
+		return $this->response;
 	}
 	
 }
