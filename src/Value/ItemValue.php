@@ -49,6 +49,14 @@ class ItemValue
 	}
 	
 	/**
+	 * @return bool
+	 */
+	public function hasDefinitions() : bool
+	{
+		return count($this->definitions) > 0;
+	}
+	
+	/**
 	 * 
 	 * @param string $key
 	 * @param mixed $value
