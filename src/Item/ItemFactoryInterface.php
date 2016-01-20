@@ -2,16 +2,24 @@
 
 namespace Verona\Item;
 
-use Verona\Value\ItemValue;
 
 interface ItemFactoryInterface
 {
-	
-	/**
-	 * 
-	 * @param string $name
-	 * @return ItemValue
-	 */
-	public function getItem(string $name) : ItemValue;
-	
+
+    /**
+     * Gets the item with the given prototype
+     *
+     * @param ItemInterface $itemPrototype
+     * @return ItemInterface
+     */
+    public function getItem(ItemInterface $itemPrototype) : ItemInterface;
+
+    /**
+     * Stores the given item
+     *
+     * @param ItemInterface $item
+     * @return ItemFactoryInterface
+     */
+    public function storeItem(ItemInterface $item) : ItemFactoryInterface;
+
 }
