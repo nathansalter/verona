@@ -45,7 +45,7 @@ abstract class AbstractItem implements ItemInterface
         $id = $prefix;
 
         for ($i = strlen($id); $i < $length; $i++) {
-            $id .= substr(static::ALPHABET, mt_rand(0, strlen(static::ALPHABET)), 1);
+            $id .= substr(static::ALPHABET, mt_rand(0, strlen(static::ALPHABET) - 1), 1);
         }
 
         $this->id = $id;

@@ -1,5 +1,7 @@
 {
   "name": "nathansalter/verona",
+  "description": "Library files for Verona persistent auditable storage",
+  "type": "library",
   "autoload": {
     "psr-4": {
       "Verona\\": "src/"

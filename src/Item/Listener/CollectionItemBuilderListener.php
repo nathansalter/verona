@@ -53,7 +53,7 @@ class CollectionItemBuilderListener
                 /** @var AbstractItem $subItem */
                 $subItem = new $subItemConf[self::SUB_TYPE]();
                 $subItem->setId($subItemConf[self::SUB_ID]);
-                $item->add($subItem);
+                $item->add($this->getItemFactory()->getItem($subItem));
             }
             unset($conf[self::ITEM_CONFIG_KEY]);
 

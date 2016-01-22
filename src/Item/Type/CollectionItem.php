@@ -83,9 +83,9 @@ class CollectionItem extends AbstractItem implements \Countable, \IteratorAggreg
 
     /**
      * @param string $itemId
-     * @return CollectionItem
+     * @return bool
      */
-    public function has(string $itemId) : CollectionItem
+    public function has(string $itemId) : bool
     {
         return isset($this->items[$itemId]);
     }
@@ -103,11 +103,25 @@ class CollectionItem extends AbstractItem implements \Countable, \IteratorAggreg
     }
 
     /**
+     * @param string $itemId
+     * @return CollectionItem
+     */
+    public function remove(string $itemId) : CollectionItem
+    {
+        if($this->has($itemId)) {
+            $this->items = array_filter($this->getAll(), function(ItemInterface $check) use ($itemId) {
+                return $check->getId() != $itemId;
+            });
+        }
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getAll() : array
     {
-        return $this->items;
+        return array_values($this->items);
     }
 
     /**
@@ -141,6 +155,9 @@ class CollectionItem extends AbstractItem implements \Countable, \IteratorAggreg
         ], $this->getBaseConfig());
     }
 
+    /**
+     * @return array
+     */
     public function getBaseConfig() : array
     {
         return array_merge([

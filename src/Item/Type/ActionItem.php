@@ -33,7 +33,7 @@ class ActionItem extends AbstractItem implements SimpleTypeInterface
     private $userId;
 
     /**
-     * @var ItemInterface
+     * @var string
      */
     private $itemType;
 
@@ -74,6 +74,16 @@ class ActionItem extends AbstractItem implements SimpleTypeInterface
     }
 
     /**
+     * @param UserItem $user
+     * @return ActionItem
+     */
+    public function setUser(UserItem $user) : ActionItem
+    {
+        $this->setUserId($user->getId());
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function hasUserId() : bool
@@ -82,9 +92,9 @@ class ActionItem extends AbstractItem implements SimpleTypeInterface
     }
 
     /**
-     * @return ItemInterface
+     * @return string
      */
-    public function getItemType() : ItemInterface
+    public function getItemType() : string
     {
         return $this->itemType;
     }
@@ -95,6 +105,19 @@ class ActionItem extends AbstractItem implements SimpleTypeInterface
      */
     public function setItemType(ItemInterface $itemType) : ActionItem
     {
+        $this->itemType = get_class($itemType);
+        return $this;
+    }
+
+    /**
+     * @param string $itemType
+     * @return ActionItem
+     */
+    public function setItemTypeString(string $itemType) : ActionItem
+    {
+        if(! is_subclass_of($itemType, ItemInterface::class)) {
+            throw new \RuntimeException(sprintf('%s() Cannot accept a non-item interface type class', __METHOD__));
+        }
         $this->itemType = $itemType;
         return $this;
     }
@@ -104,7 +127,7 @@ class ActionItem extends AbstractItem implements SimpleTypeInterface
      */
     public function hasItemType() : bool
     {
-        return $this->itemType instanceof ItemInterface;
+        return $this->itemType !== null;
     }
 
     /**
@@ -122,6 +145,17 @@ class ActionItem extends AbstractItem implements SimpleTypeInterface
     public function setItemId(string $itemId) : ActionItem
     {
         $this->itemId = $itemId;
+        return $this;
+    }
+
+    /**
+     * @param ItemInterface $item
+     * @return ActionItem
+     */
+    public function setItem(ItemInterface $item) : ActionItem
+    {
+        $this->setItemId($item->getId())
+            ->setItemType($item);
         return $this;
     }
 
@@ -168,7 +202,7 @@ class ActionItem extends AbstractItem implements SimpleTypeInterface
             array_filter([
                 self::EXCHANGE_USER_ID => $this->hasUserId() ? $this->getUserId() : null,
                 self::EXCHANGE_ITEM_ID => $this->hasItemId() ? $this->getItemId() : null,
-                self::EXCHANGE_ITEM_TYPE => $this->hasItemType() ? get_class($this->getItemType()) : null,
+                self::EXCHANGE_ITEM_TYPE => $this->hasItemType() ? $this->getItemType() : null,
                 self::EXCHANGE_ACTION_TYPE => $this->hasAction() ? $this->getAction()->get() : null
             ]),
             parent::toArray()
@@ -194,15 +228,15 @@ class ActionItem extends AbstractItem implements SimpleTypeInterface
         if (isset($data[self::EXCHANGE_ITEM_TYPE])) {
             $type = $data[self::EXCHANGE_ITEM_TYPE];
 
-            if (!$type instanceof ItemInterface) {
-                $type = new $type;
+            if ($type instanceof ItemInterface) {
+                $this->setItemType($type);
+            } else {
+                $this->setItemTypeString($type);
             }
-
-            $this->setItemType($type);
         }
 
         if (isset($data[self::EXCHANGE_ACTION_TYPE])) {
-            $action = $data[self::EXCHANGE_ITEM_TYPE];
+            $action = $data[self::EXCHANGE_ACTION_TYPE];
 
             if (!$action instanceof ActionTypeValue) {
                 $action = new ActionTypeValue($action);
