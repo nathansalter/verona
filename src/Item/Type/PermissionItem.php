@@ -110,7 +110,7 @@ class PermissionItem extends AbstractItem implements SimpleTypeInterface
      */
     public function isAllowed() : bool
     {
-        return $this->allowed;
+        return $this->allowed ? true : false;
     }
 
     /**

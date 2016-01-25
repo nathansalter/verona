@@ -33,6 +33,9 @@ class UserItem extends AbstractItem implements SimpleTypeInterface
      */
     private $userGroupId;
 
+    /**
+     * UserItem constructor.
+     */
     public function __construct()
     {
         $this->assignId(self::ID_PREFIX);
@@ -59,6 +62,9 @@ class UserItem extends AbstractItem implements SimpleTypeInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function hasFirstName() : bool
     {
         return $this->firstName !== null;
@@ -85,6 +91,9 @@ class UserItem extends AbstractItem implements SimpleTypeInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function hasSurname() : bool
     {
         return $this->surname !== null;
@@ -111,11 +120,27 @@ class UserItem extends AbstractItem implements SimpleTypeInterface
         return $this;
     }
 
+    /**
+     * @param UserGroupItem $userGroup
+     * @return UserItem
+     */
+    public function setUserGroup(UserGroupItem $userGroup) : UserItem
+    {
+        $this->setUserGroupId($userGroup->getId());
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
     public function hasUserGroupId() : bool
     {
         return $this->userGroupId !== null;
     }
 
+    /**
+     * @return array
+     */
     public function toArray() : array
     {
         return array_merge([
@@ -125,6 +150,10 @@ class UserItem extends AbstractItem implements SimpleTypeInterface
         ], parent::toArray());
     }
 
+    /**
+     * @param array $data
+     * @return ItemInterface
+     */
     public function fromArray(array $data) : ItemInterface
     {
         parent::fromArray($data);
