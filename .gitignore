@@ -1,0 +1,5 @@
+/composer.lock
+/.vagrant
+/.idea
+/bin
+/vendor
